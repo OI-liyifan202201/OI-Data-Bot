@@ -6,6 +6,7 @@ import subprocess
 import os
 import threading
 import time
+import zipfile
 
 class DataGeneratorApp:
     def __init__(self, master):
@@ -194,6 +195,17 @@ class DataGeneratorApp:
             if self.is_running:
                 messagebox.showinfo("完成", "数据生成完成！")
                 self.log_message("全部数据生成完毕")
+                with zipfile.ZipFile('data.zip', 'w') as zipf:
+                    for i in range(1, num_cases+1):
+                        in_file = os.path.join(test_dir, f"{i}.in")
+                        out_file = os.path.join(test_dir, f"{i}.out")
+                        if os.path.exists(in_file) and os.path.exists(out_file):
+                            zipf.write(in_file, f"{i}.in")
+                            zipf.write(out_file, f"{i}.out")
+                    
+                os.system("echo y | rd /s test")  
+                os.system("del ask.py")
+                self.log_message("数据已压缩到 data.zip")
 
         except Exception as e:
             messagebox.showerror("错误", str(e))
@@ -206,4 +218,3 @@ if __name__ == "__main__":
     root = ttk.tk.Tk()
     app = DataGeneratorApp(root)
     root.mainloop()
-    os.system("del ask.py")
