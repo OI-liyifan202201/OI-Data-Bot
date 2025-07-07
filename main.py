@@ -11,7 +11,7 @@ import zipfile
 class DataGeneratorApp:
     def __init__(self, master):
         self.master = master
-        master.title("数据生成器")
+        master.title("[GSML] 数据生成器")
         master.geometry("700x600")
 
         # 创建界面组件
